@@ -1,0 +1,36 @@
+{
+  "name": "lead-manager",
+  "version": "1.0.0",
+  "description": "A CRM for multi vendor loan lead management.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --env-file=.env server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShouravAhmed/lead-manager.git"
+  },
+  "keywords": [
+    "CRM",
+    "lead-management",
+    "loan",
+    "multi-vendor",
+    "express",
+    "nodejs"
+  ],
+  "author": "Ahmed Abdullah Shourav",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ShouravAhmed/lead-manager/issues"
+  },
+  "homepage": "https://github.com/ShouravAhmed/lead-manager#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1"
+  }
+}
