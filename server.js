@@ -2,12 +2,11 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// import posts from './routes/postRoute.js';
-// import auth from './routes/authRoute.js';
+import auth from './routes/authRoute.js';
 
-import logger from './middleware/logger-middleware.js';
-import errorHandler from './middleware/error-middleware.js';
-import notFoundHandler from './middleware/not-found-middleware.js';
+import logger from './middleware/loggerMiddleware.js';
+import errorHandler from './middleware/errorMiddleware.js';
+import notFoundHandler from './middleware/notFoundMiddleware.js';
 
 import connectDB from './db.js';
 
@@ -28,11 +27,8 @@ app.use(logger);
 // static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// // post routes
-// app.use('/api/posts', posts);
-
-// // auth routes
-// app.use('/api/auth', auth);
+// routes
+app.use('/api/auth', auth);
 
 // connect to database
 connectDB();
