@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 const clientSchema = new mongoose.Schema({
   team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team', required: true },
   fullName: { type: String, required: true, trim: true },
-  phone: { type: String, required: true, unique: true, trim: true },
-  email: { type: String, unique: true, trim: true },
+  phone: { type: String, required: true, trim: true },
+  email: { type: String, trim: true },
   businessName: { type: String, trim: true },
   merchantHistory: { type: String },
   deposit: { type: Number },
@@ -18,6 +18,8 @@ const clientSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
   }]
 }, { timestamps: true });
+
+clientSchema.index({ team: 1, phone: 1 }, { unique: true });
 
 const Client = mongoose.model('Client', clientSchema);
 export default Client;

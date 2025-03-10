@@ -32,9 +32,9 @@ class OtpService {
     }    
   }
 
-  async sendOtp(email) {
+  async sendOtp(email, expiresInMinutes=5) {
     const otp = this.generateOtp();
-    await OtpRepository.createOrUpdateOtp(email, otp);
+    await OtpRepository.createOrUpdateOtp(email, otp, expiresInMinutes);
     await this.emailOtp(email, otp);
   }
 
@@ -43,6 +43,19 @@ class OtpService {
     if (!otpRecord || otpRecord.value != otp.toString()) return false;
     OtpRepository.deleteOtp(email);
     return true;
+  }
+
+  async saveToken(key, value, expiresInMinutes=5) {
+    return await OtpRepository.createOrUpdateOtp(key, value, expiresInMinutes);
+  }
+
+  async findToken(key) {
+    const token = await OtpRepository.findOtp(key);
+    return token ? token.value : null;
+  }
+
+  async deleteToken(key) {
+    return await OtpRepository.deleteOtp(key);
   }
 }
 

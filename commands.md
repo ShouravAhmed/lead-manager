@@ -11,3 +11,4 @@ npm install bcrypt
 npm install jsonwebtoken 
 npm install cors 
 npm install cookie-parser
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"

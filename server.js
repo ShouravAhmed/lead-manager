@@ -3,6 +3,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import auth from './routes/authRoute.js';
+import team from './routes/teamRoute.js';
+import client from './routes/clientRoute.js';
+import lead from './routes/leadRoute.js';
+import docs from './routes/docsRoute.js';
 
 import logger from './middleware/loggerMiddleware.js';
 import errorHandler from './middleware/errorMiddleware.js';
@@ -29,6 +33,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/api/auth', auth);
+app.use('/api/team', team);
+app.use('/api/client', client);
+app.use('/api/lead', lead);
+app.use('/api/docs', docs);
 
 // connect to database
 connectDB();
