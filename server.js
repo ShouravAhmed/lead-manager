@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 import auth from './routes/authRoute.js';
 import team from './routes/teamRoute.js';
@@ -20,6 +21,8 @@ const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+
+app.use(cors());
 
 // body parser middleware
 app.use(express.json());
@@ -46,6 +49,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+export default app;
