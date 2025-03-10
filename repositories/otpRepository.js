@@ -1,4 +1,4 @@
-import OTP from "../models/OTP.js";
+import OTP from "../models/otp.js";
 
 class OtpRepository {
   async createOrUpdateOtp(key, value, expiresInMinutes = 5) {

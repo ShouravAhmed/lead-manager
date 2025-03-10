@@ -1,4 +1,4 @@
-import Team from '../models/Team.js';
+import Team from '../models/team.js';
 
 class TeamRepository {
   async getTeams() {

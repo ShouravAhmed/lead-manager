@@ -1,4 +1,4 @@
-import Lead from '../models/Lead.js';
+import Lead from '../models/lead.js';
 
 class LeadRepository {
     async getLeadsByProperty({property, limit, page}) {
