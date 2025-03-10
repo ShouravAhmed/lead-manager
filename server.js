@@ -14,6 +14,9 @@ import notFoundHandler from './middleware/notFoundMiddleware.js';
 
 import connectDB from './db.js';
 
+import dotenv from "dotenv";
+dotenv.config();
+
 // Get the directory path of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
