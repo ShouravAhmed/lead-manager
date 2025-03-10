@@ -14,9 +14,6 @@ import notFoundHandler from './middleware/notFoundMiddleware.js';
 
 import connectDB from './db.js';
 
-import dotenv from "dotenv";
-dotenv.config();
-
 // Get the directory path of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,7 +45,7 @@ connectDB();
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
-export default app;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
