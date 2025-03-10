@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "vercel-build": ""
+    "vercel-build": "echo 'Skipping build step for Express app'"
   },
   "repository": {
     "type": "git",
