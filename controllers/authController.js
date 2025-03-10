@@ -92,13 +92,10 @@ export const login = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
   try {
-    const { email, otp, old_password, password, confirm_password } = req.body;
+    const { email, otp, password, confirm_password } = req.body;
     
     if (password !== confirm_password) {
       return res.status(400).json({ message: "Passwords do not match" });
-    }
-    if (old_password === password) {
-      return res.status(400).json({ message: "New password cannot be the same as old password" });
     }
     if (!isStrongPassword(password)) {
       return res.status(400).json({ message: "Password is not strong enough" });

@@ -3,7 +3,7 @@ import Lead from '../models/Lead.js';
 class LeadRepository {
     async getLeadsByProperty({property, limit, page}) {
         limit = limit || 0;
-        page = page || 1;
+        page = page ? (page <= 0 ? 1 : page) : 1;
         const skip = (page - 1) * limit;
         const query = Lead.find(property).skip(skip).populate('client');
         if (limit) {

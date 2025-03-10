@@ -11,7 +11,8 @@ export const getLeadById = async (req, res, next) => {
       return res.status(400).json({success: false, message: 'You are not authorized to view this lead'});
     }
     res.status(200).json({success: true, message: 'Lead retrieved successfully', lead});
-  } catch (error) {
+  } 
+  catch (error) {
     next(error);
   }
 }
@@ -23,19 +24,28 @@ export const getLeadsByTeam = async (req, res, next) => {
       return res.status(400).json({success: false, message: 'You are not authorized to view leads for this team'});
     }
     const { limit, page, ...optionalQueries } = req.query;
-
-    // Build the property object
     const property = { team: req.params.id };
-    // for (const [key, value] of Object.entries(optionalQueries)) {
-    //   if (value) {
-    //     property[key] = value;
-    //   }
-    // }
-
+    for (const [key, value] of Object.entries(optionalQueries)) {
+      if (value) {
+        if(key === 'status') {
+          const statusRegex = new RegExp(value, 'i');
+          property[key] = { $regex: statusRegex };
+        }
+        else if(key === 'currentOwner') {
+          property[key] = req.user.id;
+        }	
+        else if(key === 'subOwner') {
+          property['subOwners'] = { $in: [req.user.id] };
+        }
+        else if(key === 'createdBy') {
+          property[key] = req.user.id;
+        }
+      }
+    }
     const leads = await leadService.getLeadsByProperty({ property, limit, page });
-    
     res.status(200).json({success: true, message: 'Leads retrieved successfully', leads});
-  } catch (error) {
+  } 
+  catch (error) {
     next(error);
   }
 }
@@ -60,7 +70,8 @@ export const createLead = async (req, res, next) => {
     const properties = { ...req.body, createdBy: req.user.id, currentOwner: req.user.id, subOwners: [req.user.id] };
     const lead = await leadService.createLead(properties);
     res.status(201).json({success: true, message: 'Lead created successfully', lead});
-  } catch (error) {
+  } 
+  catch (error) {
     next(error);
   }
 }
