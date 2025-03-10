@@ -23,7 +23,7 @@ export const getLeadsByTeam = async (req, res, next) => {
     if (!team || !team.members.some(member => member.equals(req.user.id))) {
       return res.status(400).json({success: false, message: 'You are not authorized to view leads for this team'});
     }
-    const { limit, page, ...optionalQueries } = req.query;
+    const { limit, page, clientPhone, fromDate, toDate, ...optionalQueries } = req.query;
     const property = { team: req.params.id };
     for (const [key, value] of Object.entries(optionalQueries)) {
       if (value) {
@@ -42,7 +42,20 @@ export const getLeadsByTeam = async (req, res, next) => {
         }
       }
     }
-    const leads = await leadService.getLeadsByProperty({ property, limit, page });
+    if(fromDate && toDate) {
+      const _fromDate = new Date(fromDate);
+      _fromDate.setHours(0, 0, 0, 0);
+
+      const _toDate = new Date(toDate);
+      _toDate.setHours(23, 59, 59, 999);
+
+      property["createdAt"] = { $gte: _fromDate, $lte: _toDate };
+    }
+    let leads = await leadService.getLeadsByProperty({ property, limit, page });
+    
+    if (clientPhone) {
+      leads = leads.filter(lead => lead.client.phone === clientPhone);
+    }
     res.status(200).json({success: true, message: 'Leads retrieved successfully', leads});
   } 
   catch (error) {

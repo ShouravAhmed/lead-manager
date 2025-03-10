@@ -255,7 +255,20 @@ res.status(200).json({
                         Authorization: 'Bearer Token'
                     }
                 },
-                queries: {}
+                queries: {
+                    required: {},
+                    optional: {
+                        limit: 'number',
+                        page: 'number',
+                        clientPhone: 'string',
+                        fromDate: 'date',
+                        toDate: 'date',
+                        status: 'string',
+                        currentOwner: 'boolean',
+                        subOwner: 'boolean',
+                        createdBy: 'boolean'
+                    }
+                }
             },
             '/api/lead': {
                 description: 'Create a new lead',
