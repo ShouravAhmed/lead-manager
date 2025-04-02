@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -14,7 +15,7 @@ import notFoundHandler from './middleware/notFoundMiddleware.js';
 
 import connectDB from './db.js';
 
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 // Get the directory path of the current module
@@ -24,31 +25,39 @@ const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-// body parser middleware
+// CORS Middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true, // Allow cookies and authorization headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// logger middleware
+// Logger middleware
 app.use(logger);
 
-// static folder
+// Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// routes
+// Routes
 app.use('/api/auth', auth);
 app.use('/api/team', team);
 app.use('/api/client', client);
 app.use('/api/lead', lead);
 app.use('/api/docs', docs);
 
-// connect to database
+// Connect to database
 connectDB();
 
-// error handler middleware
+// Error handler middleware
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
