@@ -25,13 +25,13 @@ export const register = async (req, res, next) => {
     const _username = username.toLowerCase().replace(/[^a-z0-9]/g, '');
     
     if (password !== confirm_password) {
-      return res.status(400).json({ message: "Passwords do not match" });
+      return res.status(422).json({ message: "Passwords do not match" });
     }
     if (!isStrongPassword(password)) {
-      return res.status(400).json({ message: "Password is not strong enough" });
+      return res.status(422).json({ message: "Password is not strong enough" });
     }
-    if (await userService.getUserByProperties({_username}) || await userService.getUserByProperties({email})) {
-      return res.status(400).json({ message: "Username or email already exists" });
+    if (await userService.getUserByProperties({username: _username}) || await userService.getUserByProperties({email})) {
+      return res.status(409).json({ message: "Username or email already exists" });
     }
     if (!await otpService.verifyOtp(email, otp)) {
       return res.status(400).json({ message: "Invalid OTP or OTP Expired" });
@@ -78,12 +78,12 @@ export const login = async (req, res, next) => {
     if (!isPasswordMatch) {
       return res.status(400).json({ message: "Invalid username or password" });
     }
-    const accesstoken = generateAccessToken(user);
+    const accessToken = generateAccessToken(user);
     
-    const refreshtoken = generateRefreshToken(user);
-    otpService.saveToken(user.username, refreshtoken, 1440);
+    const refreshToken = generateRefreshToken(user);
+    otpService.saveToken(user.username, refreshToken, 1440);
 
-    res.status(200).json({ message: "User logged in successfully", user, accesstoken, refreshtoken });
+    res.status(200).json({ message: "User logged in successfully", user, accessToken, refreshToken });
   } 
   catch (error) {
     res.status(400).json({ message: error.message });
@@ -133,8 +133,8 @@ export const refreshToken = async (req, res, next) => {
       return res.status(403).json({ message: "Invalid refresh token" });
     }
 
-    const accesstoken = generateAccessToken(user);
-    res.status(200).json({ message: "Token refreshed successfully", accesstoken });
+    const accessToken = generateAccessToken(user);
+    res.status(200).json({ message: "Token refreshed successfully", accessToken });
   } 
   catch (error) {
     res.status(400).json({ message: error.message });

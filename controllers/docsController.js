@@ -69,7 +69,7 @@ res.status(200).json({
                 method: 'POST',
                 body: {
                     required: {
-                        refreshtoken: 'string'
+                        refreshToken: 'string'
                     },
                     optional: {}
                 }
