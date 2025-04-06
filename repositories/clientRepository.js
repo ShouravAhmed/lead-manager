@@ -8,7 +8,14 @@ class ClientRepository {
         return await Client.create(client);
     }
     async getClientsByProperty(property) {
-        return await Client.find(property);
+        console.log({property});
+        try {
+            return await Client.find(property);
+        }
+        catch (error) {
+            console.error("Error fetching clients by property:", error);
+            throw new Error("Error fetching clients by property");
+        }
     }
     async updateClientById(id, client) {
         return await Client.findByIdAndUpdate(id, client, { new: true });

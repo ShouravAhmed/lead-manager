@@ -18,7 +18,7 @@ class TeamRepository {
       teamId,
       { $addToSet: { members: memberId } },
       { new: true }
-    );
+    ).populate('members');
   }
 }
 

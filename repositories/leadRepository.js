@@ -5,7 +5,7 @@ class LeadRepository {
         limit = limit || 0;
         page = page ? (page <= 0 ? 1 : page) : 1;
         const skip = (page - 1) * limit;
-        const query = Lead.find(property).skip(skip).populate('client');
+        const query = Lead.find(property).skip(skip).populate('client').populate('currentOwner').populate('subOwners').populate('createdBy').sort({createdAt: -1});
         if (limit) {
             query.limit(limit);
         }

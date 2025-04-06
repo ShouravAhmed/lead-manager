@@ -7,7 +7,7 @@ export const getLeadById = async (req, res, next) => {
   try {
     const lead = await leadService.getLeadById(req.params.id);
     const team = await teamService.getTeamById(lead.team);
-    if (!lead || !team || !team.members.some(member => member.equals(req.user.id))) {
+    if (!lead || !team || !team.members.some(member => member._id.toString() === req.user.id)) {
       return res.status(400).json({success: false, message: 'You are not authorized to view this lead'});
     }
     res.status(200).json({success: true, message: 'Lead retrieved successfully', lead});
@@ -20,7 +20,7 @@ export const getLeadById = async (req, res, next) => {
 export const getLeadsByTeam = async (req, res, next) => {
   try {
     const team = await teamService.getTeamById(req.params.id);
-    if (!team || !team.members.some(member => member.equals(req.user.id))) {
+    if (!team || !team.members.some(member => member._id.toString() === req.user.id)) {
       return res.status(400).json({success: false, message: 'You are not authorized to view leads for this team'});
     }
     const { limit, page, clientPhone, fromDate, toDate, ...optionalQueries } = req.query;
@@ -72,7 +72,7 @@ export const createLead = async (req, res, next) => {
     if(!team.isVarified) {
         return res.status(403).json({ success: false, message: "Lead can't be created for an unvarified team." });
     }
-    if (!team.members.some(member => member.equals(req.user.id))) {
+    if (!team.members.some(member => member._id.toString() === req.user.id)) {
       return res.status(400).json({success: false, message: 'You are not authorized to create a lead for this team'});
     }
     const client = await clientService.getClientById(req.body.client);
@@ -97,7 +97,7 @@ export const updateLead = async (req, res) => {
             return res.status(404).json({ success: false, message: "Client not found" });
         }
         const _team = await teamService.getTeamById(lead.team);
-        if (!_team || !_team.members.some(member => member.toString() === req.user.id)) {
+        if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
             return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
         }
 
@@ -124,7 +124,7 @@ export const addComment = async (req, res) => {
       return res.status(404).json({ success: false, message: "Lead not found" });
     }
     const _team = await teamService.getTeamById(lead.team);
-    if (!_team || !_team.members.some(member => member.toString() === req.user.id)) {
+    if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
       return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
     }
     
@@ -151,7 +151,7 @@ export const updateCurrentOwner = async (req, res) => {
       return res.status(404).json({ success: false, message: "Lead not found" });
     }
     const _team = await teamService.getTeamById(lead.team);
-    if (!_team || !_team.members.some(member => member.toString() === req.user.id)) {
+    if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
       return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
     }
 

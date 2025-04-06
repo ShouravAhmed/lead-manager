@@ -15,7 +15,7 @@ export const createClient = async (req, res) => {
         if(!_team.isVarified) {
             return res.status(403).json({ success: false, message: "Team is not verified" });
         }
-        if(!_team.members.some(member => member.toString() === req.user.id)) {
+        if(!_team.members.some(member => member._id.toString() === req.user.id)) {
             return res.status(403).json({ success: false, message: "Client can't be created for an unvarified team." });
         }
 
@@ -41,20 +41,22 @@ export const getClients = async (req, res) => {
         const phone = req.query.phone;
         if(teamId && phone) {
             const team = await teamService.getTeamById(teamId);
-            if(!team || !team.members.some(member => member.toString() === req.user.id)) {
+            if(!team || !team.members.some(member => member._id.toString() === req.user.id)) {
                 return res.status(403).json({ success: false, message: "You are not authorized to get clients for this team." });
             }
             const phoneRegex = new RegExp(phone, 'i');
             const clients = await clientService.getClientsByProperty({ team: team.id, phone: { $regex: phoneRegex } });
             
+            console.log({clients});
+
             if(!clients || clients.length === 0) {
                 return res.status(404).json({ success: false, message: "Client not found" });
             }
-            res.status(200).json({ success: true, message: "client fetched successfully", client: clients[0] });
+            res.status(200).json({ success: true, message: "client fetched successfully", clients });
         }
         else if(teamId) {
             const team = await teamService.getTeamById(teamId);
-            if(!team || !team.members.some(member => member.toString() === req.user.id)) {
+            if(!team || !team.members.some(member => member._id.toString() === req.user.id)) {
                 return res.status(403).json({ success: false, message: "You are not authorized to get clients for this team." });
             }
             const clients = await clientService.getClientsByProperty({ team: team.id });
@@ -77,7 +79,7 @@ export const updateClient = async (req, res) => {
             return res.status(404).json({ success: false, message: "Client not found" });
         }
         const _team = await teamService.getTeamById(client.team);
-        if (!_team || !_team.members.some(member => member.toString() === req.user.id)) {
+        if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
             return res.status(403).json({ success: false, message: "You are not authorized to update client for this team." });
         }
 
@@ -104,7 +106,7 @@ export const addComment = async (req, res) => {
         return res.status(404).json({ success: false, message: "Client not found" });
     }
     const _team = await teamService.getTeamById(client.team);
-    if (!_team || !_team.members.some(member => member.toString() === req.user.id)) {
+    if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
         return res.status(403).json({ success: false, message: "You are not authorized to update client for this team." });
     }
     
@@ -126,7 +128,7 @@ export const updateComment = async (req, res) => {
         return res.status(404).json({ success: false, message: "Client not found" });
     }
     const _team = await teamService.getTeamById(client.team);
-    if (!_team || !_team.members.some(member => member.toString() === req.user.id)) {
+    if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
         return res.status(403).json({ success: false, message: "You are not authorized to update client for this team." });
     }
 

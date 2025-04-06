@@ -31,7 +31,7 @@ export const getTeam = async (req, res) => {
   try {
     const team = await teamService.getTeamById(id);
 
-    if (!team || !team.members.some(member => member.toString() === req.user.id.toString())) {
+    if (!team || !team.members.some(member => member._id.toString() === req.user.id.toString())) {
       return res.status(403).json({ success: false, message: "You don't have access to this team" });
     }
     res.status(200).json({ success: true, message: "Team fetched successfully", team });
@@ -56,16 +56,12 @@ export const addTeamMember = async (req, res) => {
     if(team.owner.toString() !== req.user.id.toString()) {
       return res.status(403).json({ success: false, message: "You are not authorized to add members to this team" });
     }
-
     const member = await userService.getUserByUsernameOrEmail(email);
     if (!member) {
       return res.status(404).json({ success: false, message: "Member not found" });
     }
-    
-    console.log({ members: team.members });
-    console.log({ member: member.id.toString() })
 
-    if(team.members.some(m => m.toString() === member.id.toString())) {
+    if(team.members.some(m => m._id.toString() === member.id.toString())) {
       return res.status(404).json({ success: false, message: "Member already added to the team" });
     }
 
