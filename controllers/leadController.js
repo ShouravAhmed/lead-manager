@@ -101,6 +101,10 @@ export const updateLead = async (req, res) => {
             return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
         }
 
+        if(lead.currentOwner !== req.user.id) {
+            return res.status(403).json({ success: false, message: "Only Current Owner can update the lead." });
+        }
+
         const { _id, createdAt, updatedAt, createdBy, team, client, comments, currentOwner, subOwners, ...updateData } = req.body;
 
         const updatedLead = await leadService.updateLeadById(id, updateData);
@@ -126,6 +130,10 @@ export const addComment = async (req, res) => {
     const _team = await teamService.getTeamById(lead.team);
     if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
       return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
+    }
+
+    if(lead.currentOwner !== req.user.id) {
+      return res.status(403).json({ success: false, message: "Only Current Owner can update the lead." });
     }
     
     try {
@@ -153,6 +161,10 @@ export const updateCurrentOwner = async (req, res) => {
     const _team = await teamService.getTeamById(lead.team);
     if (!_team || !_team.members.some(member => member._id.toString() === req.user.id)) {
       return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
+    }
+
+    if(lead.currentOwner !== req.user.id) {
+      return res.status(403).json({ success: false, message: "Only Current Owner can update the lead." });
     }
 
     try {
