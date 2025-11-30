@@ -52,7 +52,7 @@ export const register = async (req, res, next) => {
 
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { id: user.id, username: user.username },
+    { id: user.id, username: user.username, role: user.role || 'user' },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "10m" }
   );
@@ -60,7 +60,7 @@ const generateAccessToken = (user) => {
 
 const generateRefreshToken = (user) => {
   return jwt.sign(
-    { id: user.id, username: user.username },
+    { id: user.id, username: user.username, role: user.role || 'user' },
     process.env.REFRESH_TOKEN_SECRET, 
     { expiresIn: "24h" }
   );

@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   bio: { type: String },
   password: { type: String, required: true },
   profilePicture: { type: String },
+  role: { type: String, enum: ['user', 'admin', 'superAdmin'], default: 'user' },
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);

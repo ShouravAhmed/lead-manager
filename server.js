@@ -8,6 +8,7 @@ import team from './routes/teamRoute.js';
 import client from './routes/clientRoute.js';
 import lead from './routes/leadRoute.js';
 import docs from './routes/docsRoute.js';
+import admin from './routes/adminRoute.js';
 
 import logger from './middleware/loggerMiddleware.js';
 import errorHandler from './middleware/errorMiddleware.js';
@@ -54,6 +55,7 @@ app.use('/api/team', team);
 app.use('/api/client', client);
 app.use('/api/lead', lead);
 app.use('/api/docs', docs);
+app.use('/api/admin', admin);
 
 // Connect to database
 connectDB();

@@ -21,6 +21,14 @@ class TeamService
     async addMember(teamId, memberId) {
         return await teamRepository.addMember(teamId, memberId);
     }
+
+    async updateTeam(id, updateData) {
+        return await teamRepository.updateTeam(id, updateData);
+    }
+
+    async deleteTeam(id) {
+        return await teamRepository.deleteTeam(id);
+    }
 }
 
 export default new TeamService();

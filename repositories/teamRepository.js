@@ -20,6 +20,16 @@ class TeamRepository {
       { new: true }
     ).populate('members');
   }
+  async updateTeam(id, updateData) {
+    return await Team.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    ).populate('members');
+  }
+  async deleteTeam(id) {
+    return await Team.findByIdAndDelete(id);
+  }
 }
 
 export default new TeamRepository();
