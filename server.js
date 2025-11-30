@@ -43,6 +43,11 @@ app.use(logger);
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ message: 'Server is running' });
+});
+
 // Routes
 app.use('/api/auth', auth);
 app.use('/api/team', team);

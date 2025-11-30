@@ -54,8 +54,10 @@ export const getLeadsByTeam = async (req, res, next) => {
     let leads = await leadService.getLeadsByProperty({ property, limit, page });
     
     if (clientPhone) {
-      leads = leads.filter(lead => lead.client.phone === clientPhone);
+      leads = leads.filter(lead => lead.client && lead.client.phone === clientPhone);
     }
+    
+    console.log(`Found ${leads ? leads.length : 0} leads for team ${req.params.id}`);
     res.status(200).json({success: true, message: 'Leads retrieved successfully', leads});
   } 
   catch (error) {
@@ -101,7 +103,7 @@ export const updateLead = async (req, res) => {
             return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
         }
 
-        if(lead.currentOwner !== req.user.id) {
+        if(lead.currentOwner.toString() !== req.user.id) {
             return res.status(403).json({ success: false, message: "Only Current Owner can update the lead." });
         }
 
@@ -132,7 +134,7 @@ export const addComment = async (req, res) => {
       return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
     }
 
-    if(lead.currentOwner !== req.user.id) {
+    if(lead.currentOwner.toString() !== req.user.id) {
       return res.status(403).json({ success: false, message: "Only Current Owner can update the lead." });
     }
     
@@ -163,7 +165,7 @@ export const updateCurrentOwner = async (req, res) => {
       return res.status(403).json({ success: false, message: "You are not authorized to update this lead." });
     }
 
-    if(lead.currentOwner !== req.user.id) {
+    if(lead.currentOwner.toString() !== req.user.id) {
       return res.status(403).json({ success: false, message: "Only Current Owner can update the lead." });
     }
 

@@ -1,17 +1,9 @@
+import transporter from "./emailTransporter.js";
 import nodemailer from "nodemailer";
 
 export const sendEmail = async (email, subject, text) => {
-    const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
-        secure: false,
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
-    });
     const mailOptions = {
-        from: "MS_y0AJsN@trial-vywj2lp859mg7oqz.mlsender.net",
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
         to: email,
         subject,
         text
@@ -19,8 +11,10 @@ export const sendEmail = async (email, subject, text) => {
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log(`Email sent: ${info.response}`);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     } 
     catch (error) {
-        console.log(error);
+        console.error('Email sending failed:', error);
+        throw error; // Re-throw to handle in calling function
     }   
 }
